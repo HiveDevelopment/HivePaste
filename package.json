@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "npm run build:css && npm run build:js && npm run build:viewer",
+    "build:css": "tailwindcss -i ./resources/css/app.css -o ./public/assets/hivepaste.css --minify",
+    "build:js": "esbuild resources/js/editor.js --bundle --minify --format=iife --target=es2020 --outfile=public/assets/hivepaste-editor.js",
+    "build:viewer": "esbuild resources/js/viewer.js --bundle --minify --format=iife --target=es2020 --outfile=public/assets/hivepaste-viewer.js"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "^6.18.0",
+    "@codemirror/commands": "^6.8.0",
+    "@codemirror/language": "^6.10.0",
+    "@codemirror/language-data": "^6.5.0",
+    "@codemirror/search": "^6.5.0",
+    "@codemirror/state": "^6.5.0",
+    "@codemirror/theme-one-dark": "^6.1.0",
+    "@codemirror/view": "^6.36.0",
+    "@tailwindcss/cli": "^4.1.0",
+    "esbuild": "^0.25.0",
+    "highlight.js": "^11.11.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "dependencies": {
+    "@lezer/highlight": "^1.2.5"
+  }
+}

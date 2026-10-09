@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /$
+Disallow: /api/
+Disallow: /raw/
+Disallow: /download/
+Disallow: /redaction-preview
+Disallow: /pastes
+Disallow: /*/manage
+Disallow: /*/edit
+Disallow: /*/report
+Disallow: /
+Allow: /$

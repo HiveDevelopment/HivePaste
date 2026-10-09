@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@source "../views/**/*.blade.php";
+
+@theme {
+    --font-sans: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
+    --color-hive: #f58218;
+    --color-hive-bg: #090909;
+    --color-hive-surface: #111112;
+    --color-hive-border: #292523;
+}
+
+@layer base {
+    :root { color-scheme: dark; }
+    body {
+        @apply min-h-screen bg-hive-bg font-sans text-zinc-100 antialiased;
+        background-image: radial-gradient(ellipse 60% 420px at 50% 0%, rgba(111, 50, 12, .20), transparent 85%);
+    }
+    * { box-sizing: border-box; }
+    a { @apply text-inherit no-underline; }
+}
+
+/* Highlight.js token colours for the read-only viewer. */
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in { color: #c4b5fd; }
+.hljs-string, .hljs-attr, .hljs-addition { color: #86efac; }
+.hljs-number, .hljs-literal { color: #fdba74; }
+.hljs-comment, .hljs-quote { color: #8a8580; }
+.hljs-title, .hljs-function, .hljs-type { color: #93c5fd; }
+.hljs-variable, .hljs-params { color: #f9a8d4; }

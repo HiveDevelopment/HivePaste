@@ -1,0 +1,193 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "HivePaste API",
+    "version": "1.0.0",
+    "description": "UUID-based, unlisted paste sharing. Content is accessible to anyone with the URL."
+  },
+  "servers": [
+    {
+      "url": "https://paste.example.com/api/v1",
+      "description": "Replace with your HivePaste origin"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Paste": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "raw_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "unlisted"
+            ]
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/pastes": {
+      "post": {
+        "summary": "Create paste",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "content"
+                ],
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "expires_in": {
+                    "type": "string",
+                    "enum": [
+                      "1h",
+                      "1d",
+                      "7d",
+                      "30d",
+                      "never"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paste"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "422": {
+            "description": "Validation error"
+          },
+          "429": {
+            "description": "Rate limited"
+          }
+        }
+      }
+    },
+    "/pastes/{uuid}": {
+      "parameters": [
+        {
+          "name": "uuid",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "UUID or existing legacy slug"
+        }
+      ],
+      "get": {
+        "summary": "Read paste",
+        "responses": {
+          "200": {
+            "description": "Paste including content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paste"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing or expired"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete paste owned by token",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Not owned by token"
+          },
+          "404": {
+            "description": "Missing"
+          }
+        }
+      }
+    }
+  }
+}
