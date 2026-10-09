@@ -22,12 +22,16 @@
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-hive-border px-4 py-3 text-xs text-zinc-400">
             <span id="view-info">
             </span>
-            <span>Read-only · {{ strtoupper($paste->language) }}</span>
-        </div>
-        <div class="flex max-h-[80vh] overflow-auto bg-[#0c0c0d]">
-            <div id="view-gutter" class="sticky left-0 min-w-12 select-none bg-[#151313] px-3 py-4 text-right font-mono text-sm leading-relaxed whitespace-pre text-zinc-500" aria-hidden="true">
+            <div class="flex items-center gap-3">
+                <span>Read-only · {{ strtoupper($paste->language) }}</span>
+                <button type="button" id="toggle-wrap" aria-pressed="false" class="rounded border border-[#39302a] px-2 py-1 text-zinc-300 hover:text-white">Wrap lines: Off</button>
             </div>
-            <pre class="m-0 max-h-none min-w-0 flex-1 overflow-auto bg-[#0c0c0d] p-4 font-mono text-sm leading-relaxed whitespace-pre"><code id="highlighted"></code></pre>
+        </div>
+        <div id="view-scroll" class="max-h-[80vh] overflow-auto bg-[#0c0c0d]">
+            <div id="view-row" class="flex min-w-max">
+                <div id="view-gutter" class="sticky left-0 z-10 min-w-12 shrink-0 select-none bg-[#151313] px-3 py-4 text-right font-mono text-sm leading-relaxed whitespace-pre text-zinc-500" aria-hidden="true"></div>
+                <pre id="view-pre" class="m-0 min-w-0 flex-1 overflow-visible bg-[#0c0c0d] p-4 font-mono text-sm leading-relaxed whitespace-pre"><code id="highlighted"></code></pre>
+            </div>
         </div>
     </div>
     @if(session('management_key'))
@@ -85,7 +89,7 @@
             </form>
         </div>
     </details>
-    <script defer src="{{ asset('assets/hivepaste-viewer.js') }}"></script>
+    <script defer src="{{ asset('assets/hivepaste-viewer.js') }}?v={{ filemtime(public_path('assets/hivepaste-viewer.js')) }}"></script>
     <script type="application/json" id="paste-data">@json(['content' => $paste->content, 'language' => $paste->language], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)</script>
     <script>
     (() => {
@@ -95,17 +99,21 @@
         const lines = content.split('\n').length;
         gutter.textContent = Array.from({length:lines},(_,i)=>i+1).join('\n');
         document.getElementById('view-info').textContent = `${lines} lines · ${content.length.toLocaleString()} characters`;
-        // Escape all user input before adding highlighting markup.
-        const escape = s => s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        const tokens = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:true|false|null|const|let|var|function|return|class|public|private|if|else|for|while|import|export|def|async|await|package|func|type|struct)\b|\b\d+(?:\.\d+)?\b)/g;
-        if (['text','log'].includes(language)) { code.textContent = content; }
-        else {
-            code.innerHTML = content.split(tokens).map((part, index) => {
-            if (index % 2 === 0) return escape(part);
-            const kind = /^['"]/.test(part) ? 'string' : /^\d/.test(part) ? 'number' : 'keyword';
-            return `<span class="${kind === 'string' ? 'text-green-300' : kind === 'number' ? 'text-orange-300' : 'text-purple-300'}">${escape(part)}</span>`;
-            }).join('');
-        }
+        const wrapButton = document.getElementById('toggle-wrap');
+        const row = document.getElementById('view-row');
+        const pre = document.getElementById('view-pre');
+        wrapButton.addEventListener('click', () => {
+            const wrapped = wrapButton.getAttribute('aria-pressed') !== 'true';
+            wrapButton.setAttribute('aria-pressed', String(wrapped));
+            wrapButton.textContent = `Wrap lines: ${wrapped ? 'On' : 'Off'}`;
+            row.classList.toggle('min-w-max', !wrapped);
+            row.classList.toggle('min-w-0', wrapped);
+            row.classList.toggle('w-full', wrapped);
+            pre.classList.toggle('whitespace-pre', !wrapped);
+            pre.classList.toggle('whitespace-pre-wrap', wrapped);
+            pre.classList.toggle('break-words', wrapped);
+            gutter.classList.toggle('hidden', wrapped); // Wrapped lines no longer align with fixed line numbers.
+        });
         async function copy(text, button) { try { await navigator.clipboard.writeText(text); const old=button.textContent;button.textContent='Copied!';setTimeout(()=>button.textContent=old,1600); } catch { alert('Clipboard access unavailable.'); } }
         document.getElementById('copy-content').addEventListener('click',e=>copy(content,e.currentTarget));
         document.getElementById('copy-link').addEventListener('click',e=>copy(location.href,e.currentTarget));
