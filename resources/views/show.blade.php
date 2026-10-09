@@ -3,9 +3,7 @@
 @section('content')
     <section class="pt-9 sm:pt-12 pb-8">
         <div class="text-xs font-extrabold uppercase tracking-[.16em] text-hive">Shared paste</div>
-        <h1 class="my-4 text-4xl font-bold tracking-tight lg:text-5xl">{{ $paste->title ?: 'Untitled paste' }}
-            <span class="text-hive">.</span>
-        </h1>
+        <h1 class="my-4 text-4xl font-bold tracking-tight lg:text-5xl">{{ $paste->title ?: 'Untitled paste' }}<span class="text-hive">.</span></h1>
         <p class="text-zinc-400">{{ strtoupper($paste->language) }} · {{ $paste->created_at->diffForHumans() }} · {{ $paste->expires_at?->diffForHumans() ?? 'Never expires' }} · {{ ucfirst($paste->visibility) }}</p>
     </section>
     @if(session('status'))
@@ -13,7 +11,7 @@
     @endif
     <div class="overflow-hidden rounded-2xl border border-hive-border bg-hive-surface shadow-xl">
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-hive-border px-6 py-4">
-            <strong>⬡ {{ $paste->slug }}</strong>
+            <strong>{{ $paste->slug }}</strong>
             <div class="flex flex-wrap gap-2">
                 <a class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-hive bg-hive px-5 py-3 text-sm font-bold text-[#101010] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 border-[#39302a] bg-[#1c1917] text-zinc-300" href="{{ route('pastes.raw', $paste) }}">Raw</a>
                 <a class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-hive bg-hive px-5 py-3 text-sm font-bold text-[#101010] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 border-[#39302a] bg-[#1c1917] text-zinc-300" href="{{ route('pastes.download', $paste) }}">Download</a>
@@ -29,10 +27,7 @@
         <div class="flex max-h-[80vh] overflow-auto bg-[#0c0c0d]">
             <div id="view-gutter" class="sticky left-0 min-w-12 select-none bg-[#151313] px-3 py-4 text-right font-mono text-sm leading-relaxed whitespace-pre text-zinc-500" aria-hidden="true">
             </div>
-            <pre class="m-0 max-h-none min-w-0 flex-1 overflow-auto bg-[#0c0c0d] p-4 font-mono text-sm leading-relaxed whitespace-pre">
-                <code id="highlighted">
-                </code>
-            </pre>
+            <pre class="m-0 max-h-none min-w-0 flex-1 overflow-auto bg-[#0c0c0d] p-4 font-mono text-sm leading-relaxed whitespace-pre"><code id="highlighted"></code></pre>
         </div>
     </div>
     @if(session('management_key'))

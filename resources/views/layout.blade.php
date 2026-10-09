@@ -59,7 +59,7 @@
                 <nav aria-label="Main navigation" class="flex min-w-0 items-center gap-2 text-xs font-semibold sm:gap-7 sm:text-sm">
                     <a href="{{ route('home') }}" class="hidden text-zinc-400 transition-colors hover:text-white min-[420px]:inline-flex">New paste</a>
                     <a href="https://hivepanel.dev" target="_blank" rel="noopener noreferrer" class="hidden text-zinc-400 transition-colors hover:text-white sm:inline-flex">HivePanel</a>
-                    <a href="https://hivepanel.dev" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-hive px-3 py-2.5 font-bold text-black transition-colors hover:bg-orange-400 sm:px-4">Hive ecosystem ↗</a>
+                    <a href="https://github.com/HiveDevelopment" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-hive px-3 py-2.5 font-bold text-black transition-colors hover:bg-orange-400 sm:px-4">Hive ecosystem ↗</a>
                 </nav>
             </div>
         </header>
