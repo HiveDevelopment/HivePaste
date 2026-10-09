@@ -3,6 +3,12 @@
 return [
     'legal_updated' => env('HIVEPASTE_LEGAL_UPDATED', 'Not yet reviewed'),
     'anonymous_enabled' => (bool) env('HIVEPASTE_ANONYMOUS_ENABLED', true),
+    'hivepanel_public_enabled' => (bool) env('HIVEPASTE_HIVEPANEL_PUBLIC_ENABLED', false),
+    'hivepanel_max_bytes' => (int) env('HIVEPASTE_HIVEPANEL_MAX_BYTES', 524288),
+    'hivepanel_rate_limit' => (int) env('HIVEPASTE_HIVEPANEL_RATE_LIMIT', 5),
+    'hivepanel_daily_ip_limit' => (int) env('HIVEPASTE_HIVEPANEL_DAILY_IP_LIMIT', 50),
+    'hivepanel_global_hourly_limit' => (int) env('HIVEPASTE_HIVEPANEL_GLOBAL_HOURLY_LIMIT', 300),
+    'hivepanel_global_daily_limit' => (int) env('HIVEPASTE_HIVEPANEL_GLOBAL_DAILY_LIMIT', 2000),
     'api_enabled' => (bool) env('HIVEPASTE_API_ENABLED', true),
     'max_paste_bytes' => (int) env('HIVEPASTE_MAX_PASTE_BYTES', 524288),
     'web_rate_limit' => (int) env('HIVEPASTE_WEB_RATE_LIMIT', 10),

@@ -4,7 +4,7 @@ Base URL: `https://YOUR_DOMAIN/api/v1`
 
 ## Authentication
 
-Create an API token on the server using `php artisan paste:token:create` (check the command help for arguments). Pass the token using `Authorization: Bearer YOUR_TOKEN`. Token required for creation and deletion. Do not embed an API token in public browser code.
+Create an API token on the server using `php artisan hivepaste:token:create` (check the command help for arguments). Pass the token using `Authorization: Bearer YOUR_TOKEN`. Token required for creation and deletion. Do not embed an API token in public browser code.
 
 ## Endpoints
 
