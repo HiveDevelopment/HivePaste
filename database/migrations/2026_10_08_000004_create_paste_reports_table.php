@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('paste_reports', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('paste_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('paste_id')->constrained()->cascadeOnDelete();
             $table->string('reason', 40);
             $table->text('details')->nullable();
             $table->string('reporter_ip_hash', 64);
